@@ -27,38 +27,45 @@ function createGrid() {
 
 
 function select_icon() {
+    let tempbool = false;
     if(Selected_row === target_Row && Selected_col === target_Col +1){
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
+        tempbool = true;
+
     } else if(Selected_row === target_Row && Selected_col === target_Col -1){
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
+        tempbool = true;
     } else if(Selected_row === target_Row +1  && Selected_col === target_Col ){
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
+        tempbool = true;
     } else if(Selected_row === target_Row -1 && Selected_col === target_Col +1){
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
+        tempbool = true;
     }else{
         const tempIcon1 = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = tempIcon1;
         displayIcon();
     }
-
-     if (checkForMatches()) {
+    if (tempbool === true) {
+        if (checkForMatches()) {
             removeMatchesAndRefill();
 
-     } else{
-         const tempIcon1 = grid[target_Row][target_Col].icon;
-         grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
-         grid[Selected_row][Selected_col].icon = tempIcon1;
-         displayIcon();
+        } else {
+            const tempIcon1 = grid[target_Row][target_Col].icon;
+            grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
+            grid[Selected_row][Selected_col].icon = tempIcon1;
+            displayIcon();
         }
+    }
 }
 function getRandomIcon() {
     const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png', 'Icons/teddy-bear.png'];
