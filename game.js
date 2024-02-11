@@ -116,7 +116,67 @@ function removeMatchesAndRefill() {
 
 }
 
+// Inside displayIcon() function, add event listeners to each icon
+function displayIcon() {
+    const iconContainer = document.getElementById('icon-container');
+    
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
+            const img = document.createElement('img');
+            img.style.height = '85px';
+            img.style.width = '85px';
+            img.src = grid[i][j].icon;
+            img.draggable = true; // Make the icon draggable
+            img.addEventListener('dragstart', dragStart);
+            img.addEventListener('dragover', dragOver);
+            img.addEventListener('drop', drop);
+            iconContainer.appendChild(img);
+        }
+    }
+}
 
+let draggedIcon = null;
+
+function dragStart(event) {
+    draggedIcon = event.target;
+}
+
+function dragOver(event) {
+    event.preventDefault();
+}
+
+function drop(event) {
+    event.preventDefault();
+    const target = event.target;
+    const targetRow = Math.floor(target.offsetTop / 85); // Calculate row based on position
+    const targetCol = Math.floor(target.offsetLeft / 85); // Calculate column based on position
+
+    // Swap icons in the grid
+    const draggedRow = Math.floor(draggedIcon.offsetTop / 85);
+    const draggedCol = Math.floor(draggedIcon.offsetLeft / 85);
+    const tempIcon = grid[targetRow][targetCol].icon;
+    grid[targetRow][targetCol].icon = grid[draggedRow][draggedCol].icon;
+    grid[draggedRow][draggedCol].icon = tempIcon;
+
+    // Update the displayed icons
+    const iconContainer = document.getElementById('icon-container');
+    const iconIndex = Array.from(iconContainer.children).indexOf(draggedIcon);
+    iconContainer.removeChild(draggedIcon);
+    iconContainer.removeChild(target);
+    iconContainer.insertBefore(target, iconContainer.children[iconIndex]);
+    iconContainer.insertBefore(draggedIcon, iconContainer.children[iconIndex]);
+
+    // Check for matches after the move
+    if (checkForMatches()) {
+        removeMatchesAndRefill();
+    } else {
+        // If no matches, swap icons back
+        const temp = grid[targetRow][targetCol].icon;
+        grid[targetRow][targetCol].icon = grid[draggedRow][draggedCol].icon;
+        grid[draggedRow][draggedCol].icon = temp;
+        displayIcon(); // Redraw the icons
+    }
+}
 
 
 function removeIconByCoordinatesAndReplace(row, col) {
