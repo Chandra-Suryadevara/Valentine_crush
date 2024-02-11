@@ -20,10 +20,10 @@ body {
 
 #icon-container {
     box-sizing: border-box;
-    padding: 0px;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    width:45%;
+    grid-template-columns: repeat(8, 85px);
+    width: 45%;
     border-collapse: collapse; 
     border-spacing: 0;
     margin: 0 auto;
