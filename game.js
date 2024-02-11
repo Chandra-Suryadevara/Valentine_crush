@@ -27,10 +27,28 @@ function createGrid() {
 
 
 function select_icon() {
-    console.log("inside selectiocon"+ Selected_row);
-     const tempIcon = grid[Selected_row][Selected_col].icon;
-     grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
-     grid[target_Row][target_Col].icon = tempIcon;
+    if(Selected_row === target_Row && Selected_col === target_Col +1){
+        const tempIcon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = tempIcon;
+    } else if(Selected_row === target_Row && Selected_col === target_Col -1){
+        const tempIcon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = tempIcon;
+    } else if(Selected_row === target_Row +1  && Selected_col === target_Col ){
+        const tempIcon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = tempIcon;
+    } else if(Selected_row === target_Row -1 && Selected_col === target_Col +1){
+        const tempIcon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = tempIcon;
+    }else{
+        const tempIcon1 = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = tempIcon1;
+        displayIcon();
+    }
 
      if (checkForMatches()) {
             removeMatchesAndRefill();
@@ -43,7 +61,7 @@ function select_icon() {
         }
 }
 function getRandomIcon() {
-    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png'];
+    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png', 'Icons/teddy-bear.png'];
     return icons[Math.floor(Math.random() * icons.length)];
 }
 
@@ -56,9 +74,13 @@ function checkForMatches() {
     //horizontal matches
     for (let i = 0; i < numRows; i++) {
         for (let j = 0; j < numCols - 2; j++) {
-            if (grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon) {
+            if ((grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon) ||
+                ((j - 1 >= 0 && j + 1 < grid[i].length) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)) ||
+                ((j - 1 >= 0 && j - 2 >= 0) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j - 2].icon))) {
+
                 foundMatch = true;
                 horizontal_match = true;
+                console.log("horizontal happened")
             }
         }
     }
@@ -66,7 +88,10 @@ function checkForMatches() {
     //vertical matches
     for (let j = 0; j < numCols; j++) {
         for (let i = 0; i < numRows - 2; i++) {
-            if (grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) {
+            if ((grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) ||
+                ((i - 1 >= 0 && i + 1 < grid.length) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)) ||
+                ((i - 1 >= 0 && i - 2 >= 0) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i - 2][j].icon))) {
+
                 foundMatch = true;
                 vertical_match = true;
             }
@@ -79,22 +104,46 @@ function removeMatchesAndRefill() {
     if (vertical_match === true) {
         for (let j = 0; j < numCols; j++) {
             for (let i = 0; i < numRows - 2; i++) {
-                if (grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) {
+                if ((grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon)){
                     // Remove the matched icons from the DOM
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i + 1, j);
                     removeIconByCoordinatesAndReplace(i + 2, j);
                     updateScore(1);
+
+                }else if((i - 1 >= 0 && i + 1 < grid.length) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)){
+                    removeIconByCoordinatesAndReplace(i, j);
+                    removeIconByCoordinatesAndReplace(i - 1, j);
+                    removeIconByCoordinatesAndReplace(i + 1, j);
+                    updateScore(1);
+
+                }else if((i - 1 >= 0 && i - 2 >= 0) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i - 2][j].icon))
+                {
+                    removeIconByCoordinatesAndReplace(i, j);
+                    removeIconByCoordinatesAndReplace(i - 1, j);
+                    removeIconByCoordinatesAndReplace(i + 2, j);
+                    updateScore(1);
+                }
+
                 }
             }
-        }
     }else if (horizontal_match === true){
         for (let i = 0; i < numRows; i++) {
             for (let j = 0; j < numCols - 2; j++) {
-                if (grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon) {
+                if ((grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon)) {
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i , j+1);
                     removeIconByCoordinatesAndReplace(i , j+2);
+                    updateScore(1);
+                } else if((j - 1 >= 0 && j + 1 < grid[i].length) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)){
+                    removeIconByCoordinatesAndReplace(i, j);
+                    removeIconByCoordinatesAndReplace(i , j-1);
+                    removeIconByCoordinatesAndReplace(i , j+1);
+                    updateScore(1);
+                } else if((j - 1 >= 0 && j - 2 >= 0) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j - 2].icon)) {
+                    removeIconByCoordinatesAndReplace(i, j);
+                    removeIconByCoordinatesAndReplace(i , j-1);
+                    removeIconByCoordinatesAndReplace(i , j-2);
                     updateScore(1);
                 }
             }
