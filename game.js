@@ -38,3 +38,42 @@ function selectIcon(row, col) {
         selectedIcon = null;
     }
 }
+function checkForMatches() {
+    let foundMatch = false;
+
+    //horizontal matches
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols - 2; j++) {
+            if (grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon) {
+                foundMatch = true;
+                // TODO logic to handle matched icons
+            }
+        }
+    }
+
+    //vertical matches
+    for (let j = 0; j < numCols; j++) {
+        for (let i = 0; i < numRows - 2; i++) {
+            if (grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) {
+                foundMatch = true;
+                // TODO Implement logic to handle matched icons
+            }
+        }
+    }
+
+    return foundMatch;
+}
+function removeMatchesAndRefill() {
+}
+let score = 0;
+
+function updateScore(points) {
+    score += points;
+    document.getElementById('score').textContent = score;
+}
+
+function handleMatch() {
+    // TODO logic to calculate points
+    const points = 1; // Example: 1 points for each match
+    updateScore(points);
+}
