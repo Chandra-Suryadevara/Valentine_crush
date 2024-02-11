@@ -105,7 +105,7 @@ function removeMatchesAndRefill() {
 
 function displayIcon() {
     const iconContainer = document.getElementById('icon-container');
-    
+    iconContainer.innerHTML = '';
     for (let i = 0; i < numRows; i++) {
         for (let j = 0; j < numCols; j++) {
             const img = document.createElement('img');
@@ -160,11 +160,14 @@ function dragEnd() {
 
 
 function removeIconByCoordinatesAndReplace(row, col) {
+    console.log(grid[row][col].icon)
     grid[row][col] = {
         icon: getRandomIcon(),
         row: row,
         col: col
     };
+    displayIcon();
+    console.log(grid[row][col].icon)
 }
 
 
