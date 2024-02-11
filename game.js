@@ -3,6 +3,14 @@ const numCols = 8;
 const grid = [];
 let vertical_match = false;
 let horizontal_match = false;
+let selectedIcon = null;
+let Selected_row;
+let Selected_col;
+let image;
+let target_Col;
+let target_Row;
+let target_image;
+
 
 function createGrid() {
     for (let i = 0; i < numRows; i++) {
@@ -17,36 +25,32 @@ function createGrid() {
     }
 }
 
-let selectedIcon = null;
 
-function selectIcon(row, col) {
-    if (!selectedIcon) {
-        selectedIcon = { row, col };
-    } else {
-        const tempIcon = grid[row][col].icon;
-        grid[row][col].icon = grid[selectedIcon.row][selectedIcon.col].icon;
-        grid[selectedIcon.row][selectedIcon.col].icon = tempIcon;
+function select_icon() {
+    console.log("inside selectiocon"+ Selected_row);
+     const tempIcon = grid[Selected_row][Selected_col].icon;
+     grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
+     grid[target_Row][target_Col].icon = tempIcon;
 
-        if (checkForMatches()) {
+     if (checkForMatches()) {
             removeMatchesAndRefill();
 
-        } else {
-            const tempRow = selectedIcon.row;
-            const tempCol = selectedIcon.col;
-            grid[selectedIcon.row][selectedIcon.col].icon = grid[row][col].icon;
-            grid[row][col].icon = tempIcon;
+     } else{
+         const tempIcon1 = grid[target_Row][target_Col].icon;
+         grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
+         grid[Selected_row][Selected_col].icon = tempIcon1;
+         displayIcon();
         }
-        selectedIcon = null;
-    }
 }
 function getRandomIcon() {
-    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png', 'Icons/teddy-bear.png'];
+    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png'];
     return icons[Math.floor(Math.random() * icons.length)];
 }
 
 
 function checkForMatches() {
     let foundMatch = false;
+    console.log("inside Checkformatches");
     vertical_match = false;
     horizontal_match = false;
     //horizontal matches
@@ -96,12 +100,6 @@ function removeMatchesAndRefill() {
             }
         }
     }
-
-
-
-
-
-
 }
 
 
@@ -114,74 +112,59 @@ function displayIcon() {
             img.style.height = '85px';
             img.style.width = '85px';
             img.src = grid[i][j].icon;
+            img.row = grid[i][j].row
+            img.col = grid[i][j].col
             img.draggable = true; // Make the icon draggable
             img.addEventListener('dragstart', dragStart);
             img.addEventListener('dragover', dragOver);
-            img.addEventListener('drop', drop);
+            img.addEventListener("dragenter", dragEnter);
+            img.addEventListener("dragleave", dragLeave);
+            img.addEventListener('drop', dragDrop);
+            img.addEventListener("dragend", dragEnd);
             iconContainer.appendChild(img);
         }
     }
 }
 
-let draggedIcon = null;
 
-function dragStart(event) {
-    draggedIcon = event.target;
+function dragStart() {
+    image = this;
+    Selected_row = this.row; // Get row value
+    Selected_col = this.col; // Get column value
 }
 
-function dragOver(event) {
-    event.preventDefault();
+function dragDrop(e) {
+    e.preventDefault();
+    target_image = this;
+    target_Row = this.row; // Get target row value
+    target_Col = this.col; // Get target column value
+    select_icon();
 }
 
-function drop(event) {
-    event.preventDefault();
-    const target = event.target;
-    const targetRow = Math.floor(target.offsetTop / 85); // Calculate row based on position
-    const targetCol = Math.floor(target.offsetLeft / 85); // Calculate column based on position
-
-    // Swap icons in the grid
-    const draggedRow = Math.floor(draggedIcon.offsetTop / 85);
-    const draggedCol = Math.floor(draggedIcon.offsetLeft / 85);
-    const tempIcon = grid[targetRow][targetCol].icon;
-    grid[targetRow][targetCol].icon = grid[draggedRow][draggedCol].icon;
-    grid[draggedRow][draggedCol].icon = tempIcon;
-
-    // Update the displayed icons
-    const iconContainer = document.getElementById('icon-container');
-    const iconIndex = Array.from(iconContainer.children).indexOf(draggedIcon);
-    iconContainer.removeChild(draggedIcon);
-    iconContainer.removeChild(target);
-    iconContainer.insertBefore(target, iconContainer.children[iconIndex]);
-    iconContainer.insertBefore(draggedIcon, iconContainer.children[iconIndex]);
-
-    // Check for matches after the move
-    if (checkForMatches()) {
-        removeMatchesAndRefill();
-    } else {
-        // If no matches, swap icons back
-        const temp = grid[targetRow][targetCol].icon;
-        grid[targetRow][targetCol].icon = grid[draggedRow][draggedCol].icon;
-        grid[draggedRow][draggedCol].icon = temp;
-        displayIcon(); // Redraw the icons
-    }
+function dragOver(e) {
+    e.preventDefault();
 }
+
+function dragEnter(e) {
+    e.preventDefault();
+}
+
+function dragLeave() {
+
+}
+
+function dragEnd() {
+
+}
+
 
 
 function removeIconByCoordinatesAndReplace(row, col) {
-    const removedIcon = grid[row][col].icon;
-    grid[row][col].icon = null;
-    const iconContainer = document.getElementById('icon-container');
-    const iconToRemove = iconContainer.children[row * numCols + col];
-    iconToRemove.parentNode.removeChild(iconToRemove);
-
-    const newIcon = getRandomIcon();
-    grid[row][col].icon = newIcon;
-
-    const img = document.createElement('img');
-    img.style.height = '85px';
-    img.style.width = '85px';
-    img.src = newIcon;
-    iconContainer.appendChild(img);
+    grid[row][col] = {
+        icon: getRandomIcon(),
+        row: row,
+        col: col
+    };
 }
 
 
