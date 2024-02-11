@@ -1,21 +1,19 @@
 const numRows = 10;
-const numCols = 10;
+const numCols = 8;
 const grid = [];
 
-for (let i = 0; i < numRows; i++) {
-    grid[i] = [];
-    for (let j = 0; j < numCols; j++) {
-        // Each cell in the grid is an object containing properties for the icon and position
-        grid[i][j] = {
-            icon: getRandomIcon(),
-            row: i,
-            col: j
-        };
+
+function createGrid() {
+    for (let i = 0; i < numRows; i++) {
+        grid[i] = [];
+        for (let j = 0; j < numCols; j++) {
+            grid[i][j] = {
+                icon: getRandomIcon(),
+                row: i,
+                col: j
+            };
+        }
     }
-}
-function getRandomIcon() {
-    const icons = [];
-    return icons[Math.floor(Math.random() * icons.length)];
 }
 
 let selectedIcon = null;
@@ -36,6 +34,24 @@ function selectIcon(row, col) {
             grid[row][col].icon = tempIcon;
         }
         selectedIcon = null;
+    }
+}
+function getRandomIcon() {
+    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png'];
+    return icons[Math.floor(Math.random() * icons.length)];
+}
+
+function displayIcon() {
+    const iconContainer = document.getElementById('icon-container');
+    
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
+            const img = document.createElement('img');
+            img.style.height = '85px';
+            img.style.width = '85px';
+            img.src = grid[i][j].icon;
+            iconContainer.appendChild(img);
+        }
     }
 }
 function checkForMatches() {
@@ -71,9 +87,11 @@ function updateScore(points) {
     score += points;
     document.getElementById('score').textContent = score;
 }
-
 function handleMatch() {
     // TODO logic to calculate points
     const points = 1; // Example: 1 points for each match
     updateScore(points);
 }
+createGrid();
+
+displayIcon();

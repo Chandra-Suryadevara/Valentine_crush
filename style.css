@@ -11,13 +11,25 @@ body {
     background-image: url('./Icons/Background.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     font-family: 'Impact', sans-serif;
     text-align: center; 
     margin-top: 10px;
 }
 
 
+#icon-container {
+    box-sizing: border-box;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(8, 7.4vh);
+    width:40%;
+    gap: 1px;
+    margin: 0 auto;
+}
+#icon-container img {
+    border: 2px solid #020202; 
+}
 
 h1 {
     font-family: 'Lato', sans-serif; 
