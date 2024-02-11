@@ -44,19 +44,7 @@ function getRandomIcon() {
     return icons[Math.floor(Math.random() * icons.length)];
 }
 
-function displayIcon() {
-    const iconContainer = document.getElementById('icon-container');
-    
-    for (let i = 0; i < numRows; i++) {
-        for (let j = 0; j < numCols; j++) {
-            const img = document.createElement('img');
-            img.style.height = '85px';
-            img.style.width = '85px';
-            img.src = grid[i][j].icon;
-            iconContainer.appendChild(img);
-        }
-    }
-}
+
 function checkForMatches() {
     let foundMatch = false;
     vertical_match = false;
@@ -116,7 +104,7 @@ function removeMatchesAndRefill() {
 
 }
 
-// Inside displayIcon() function, add event listeners to each icon
+
 function displayIcon() {
     const iconContainer = document.getElementById('icon-container');
     
