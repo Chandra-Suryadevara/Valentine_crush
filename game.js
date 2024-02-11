@@ -40,7 +40,7 @@ function selectIcon(row, col) {
     }
 }
 function getRandomIcon() {
-    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png'];
+    const icons = ['Icons/Chocolate.png', 'Icons/cupcake.png', 'Icons/gift.png', 'Icons/heart.png', 'Icons/rose.png', 'Icons/teddy-bear.png'];
     return icons[Math.floor(Math.random() * icons.length)];
 }
 
