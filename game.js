@@ -10,7 +10,7 @@ let image;
 let target_Col;
 let target_Row;
 let target_image;
-let timeRemaining = 60;
+let timeRemaining = 10;
 let timerInterval;
 
 
@@ -44,6 +44,10 @@ function createGrid() {
 
 
 function select_icon() {
+    if (timeRemaining <= 0) {
+        // Timer has reached 0, so no swapping allowed
+        return;
+    }
     let tempbool = false;
     if(Selected_row === target_Row && Selected_col === target_Col +1) //right
     {
