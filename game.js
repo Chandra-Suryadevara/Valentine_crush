@@ -18,14 +18,29 @@ function createGrid() {
     for (let i = 0; i < numRows; i++) {
         grid[i] = [];
         for (let j = 0; j < numCols; j++) {
+            let icon;
+            if (j >= 2 && grid[i][j - 1].icon === grid[i][j - 2].icon) {
+                do {
+                    icon = getRandomIcon();
+                } while (icon === grid[i][j - 1].icon);
+            }
+            if (i >= 2 && grid[i - 1][j].icon === grid[i - 2][j].icon) {
+                do {
+                    icon = getRandomIcon();
+                } while (icon === grid[i - 1][j].icon);
+            }
+            if (!icon) {
+                icon = getRandomIcon();
+            }
             grid[i][j] = {
-                icon: getRandomIcon(),
+                icon: icon,
                 row: i,
                 col: j
             };
         }
     }
 }
+
 
 
 function select_icon() {
