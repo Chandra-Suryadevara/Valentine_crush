@@ -238,7 +238,6 @@ function dragEnd() {
 
 
 function removeIconByCoordinatesAndReplace(row, col) {
-    console.log(grid[row][col].icon)
     grid[row][col] = {
         icon: getRandomIcon(),
         row: row,
