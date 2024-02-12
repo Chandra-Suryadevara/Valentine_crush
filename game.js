@@ -10,7 +10,7 @@ let image;
 let target_Col;
 let target_Row;
 let target_image;
-let timeRemaining = 10;
+let timeRemaining = 60;
 let timerInterval;
 
 
