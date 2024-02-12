@@ -10,6 +10,8 @@ let image;
 let target_Col;
 let target_Row;
 let target_image;
+let timeRemaining = 60;
+let timerInterval;
 
 
 function createGrid() {
@@ -253,11 +255,27 @@ function updateScore(points) {
     score += points;
     document.getElementById('score').textContent = score;
 }
-function handleMatch() {
-    // TODO logic to calculate points
-    const points = 1; // Example: 1 points for each match
-    updateScore(points);
+
+
+function startTimer() {
+    timerInterval = setInterval(updateTimer, 1000); 
 }
+
+function updateTimer() {
+    timeRemaining--;
+    document.getElementById('time').textContent = timeRemaining;
+    if (timeRemaining <= 0) {
+        clearInterval(timerInterval); 
+        displayScore();
+    }
+}
+
+function displayScore() {
+    alert("Time's up! Your final score is: " + score);
+}
+
+startTimer(); // Start the timer when the page loads
+
 createGrid();
 
 displayIcon();
