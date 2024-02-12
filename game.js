@@ -28,33 +28,45 @@ function createGrid() {
 
 function select_icon() {
     let tempbool = false;
-    if(Selected_row === target_Row && Selected_col === target_Col +1){
+    if(Selected_row === target_Row && Selected_col === target_Col +1) //right
+    {
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-
-    } else if(Selected_row === target_Row && Selected_col === target_Col -1){
+        console.log("right");
+    } 
+    else if(Selected_row === target_Row && Selected_col === target_Col -1) //left
+    {
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-    } else if(Selected_row === target_Row +1  && Selected_col === target_Col ){
+        console.log("left");
+    } 
+    else if(Selected_row === target_Row +1  && Selected_col === target_Col ) //up
+    {
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-    } else if(Selected_row === target_Row -1 && Selected_col === target_Col +1){
+        console.log("up");
+    } 
+    else if(Selected_row === target_Row -1 && Selected_col === target_Col +1) //down
+    {
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-    }else{
+        console.log("down");
+    }
+    else{
         const tempIcon1 = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = tempIcon1;
         displayIcon();
     }
+
     if (tempbool === true) {
         if (checkForMatches()) {
             removeMatchesAndRefill();
