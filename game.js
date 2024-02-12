@@ -36,7 +36,7 @@ function select_icon() {
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-        console.log("right");
+        console.log("left");
     } 
     else if(Selected_row === target_Row && Selected_col === target_Col -1) //left
     {
@@ -44,7 +44,7 @@ function select_icon() {
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
         grid[target_Row][target_Col].icon = tempIcon;
         tempbool = true;
-        console.log("left");
+        console.log("right");
     } 
     else if(Selected_row === target_Row +1  && Selected_col === target_Col ) //up
     {
@@ -54,7 +54,7 @@ function select_icon() {
         tempbool = true;
         console.log("up");
     } 
-    else if(Selected_row === target_Row -1 && Selected_col === target_Col +1) //down
+    else if(Selected_row === target_Row -1 && Selected_col === target_Col) //down
     {
         const tempIcon = grid[Selected_row][Selected_col].icon;
         grid[Selected_row][Selected_col].icon = grid[target_Row][target_Col].icon;
@@ -79,6 +79,11 @@ function select_icon() {
             grid[Selected_row][Selected_col].icon = tempIcon1;
             displayIcon();
         }
+    }else {
+        const tempIcon1 = grid[target_Row][target_Col].icon;
+        grid[target_Row][target_Col].icon = grid[Selected_row][Selected_col].icon;
+        grid[Selected_row][Selected_col].icon = tempIcon1;
+        displayIcon();
     }
 }
 function getRandomIcon() {
@@ -93,38 +98,34 @@ function checkForMatches() {
     vertical_match = false;
     horizontal_match = false;
     //horizontal matches
-    for (let i = 0; i < numRows; i++) {
-        for (let j = 0; j < numCols - 2; j++) {
+    let i = target_Row;
+    let j = target_Col;
             if ((grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon) ||
-                ((j - 1 >= 0 && j + 1 < grid[i].length) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)) ||
+                ((j - 1 >= 0 && j + 1 < numCols) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)) ||
                 ((j - 1 >= 0 && j - 2 >= 0) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j - 2].icon))) {
 
                 foundMatch = true;
                 horizontal_match = true;
                 console.log("horizontal happened")
             }
-        }
-    }
 
-    //vertical matches
-    for (let j = 0; j < numCols; j++) {
-        for (let i = 0; i < numRows - 2; i++) {
+
             if ((grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) ||
-                ((i - 1 >= 0 && i + 1 < grid.length) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)) ||
+                ((i - 1 >= 0 && i + 1 < numRows) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)) ||
                 ((i - 1 >= 0 && i - 2 >= 0) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i - 2][j].icon))) {
                 console.log("vertical happened")
                 foundMatch = true;
                 vertical_match = true;
             }
-        }
-    }
+
 
     return foundMatch;
 }
 function removeMatchesAndRefill() {
+    let i = target_Row;
+    let j = target_Col;
     if (vertical_match === true) {
-        for (let j = 0; j < numCols; j++) {
-            for (let i = 0; i < numRows - 2; i++) {
+
                 if ((grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon)){
                     // Remove the matched icons from the DOM
                     removeIconByCoordinatesAndReplace(i, j);
@@ -132,7 +133,7 @@ function removeMatchesAndRefill() {
                     removeIconByCoordinatesAndReplace(i + 2, j);
                     updateScore(1);
 
-                }else if((i - 1 >= 0 && i + 1 < grid.length) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)){
+                }else if((i - 1 >= 0 && i + 1 < numRows) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)){
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i - 1, j);
                     removeIconByCoordinatesAndReplace(i + 1, j);
@@ -146,17 +147,16 @@ function removeMatchesAndRefill() {
                     updateScore(1);
                 }
 
-                }
-            }
+
+
     }else if (horizontal_match === true){
-        for (let i = 0; i < numRows; i++) {
-            for (let j = 0; j < numCols - 2; j++) {
+
                 if ((grid[i][j].icon === grid[i][j + 1].icon && grid[i][j].icon === grid[i][j + 2].icon)) {
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i , j+1);
                     removeIconByCoordinatesAndReplace(i , j+2);
                     updateScore(1);
-                } else if((j - 1 >= 0 && j + 1 < grid[i].length) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)){
+                } else if((j - 1 >= 0 && j + 1 < numCols) && (grid[i][j].icon === grid[i][j - 1].icon && grid[i][j].icon === grid[i][j + 1].icon)){
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i , j-1);
                     removeIconByCoordinatesAndReplace(i , j+1);
@@ -168,8 +168,6 @@ function removeMatchesAndRefill() {
                     updateScore(1);
                 }
             }
-        }
-    }
 }
 
 
@@ -240,19 +238,25 @@ function dragEnd() {
 
 
 function removeIconByCoordinatesAndReplace(row, col) {
-    grid[row][col] = {
-        icon: getRandomIcon(),
-        row: row,
-        col: col
-    };
-    displayIcon();
+    let previousIcon = grid[row][col].icon;
+    let newIcon = getRandomIcon();
+
+    // Keep generating a new icon until it's different from the previous one
+    while (previousIcon === newIcon) {
+        newIcon = getRandomIcon();
+    }
+
+    grid[row][col].icon = newIcon;
+
 }
+
 
 
 let score = 0;
 
 function updateScore(points) {
     score += points;
+    displayIcon();
     document.getElementById('score').textContent = score;
 }
 
