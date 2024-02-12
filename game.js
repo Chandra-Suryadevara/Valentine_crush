@@ -296,6 +296,9 @@ function updateTimer() {
 function displayScore() {
     alert("Time's up! Your final score is: " + score);
 }
+document.getElementById('restart-btn').addEventListener('click', function() {
+    location.reload(); // Reload the page
+});
 
 startTimer(); // Start the timer when the page loads
 
