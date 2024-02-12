@@ -110,7 +110,7 @@ function checkForMatches() {
             if ((grid[i][j].icon === grid[i + 1][j].icon && grid[i][j].icon === grid[i + 2][j].icon) ||
                 ((i - 1 >= 0 && i + 1 < grid.length) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i + 1][j].icon)) ||
                 ((i - 1 >= 0 && i - 2 >= 0) && (grid[i][j].icon === grid[i - 1][j].icon && grid[i][j].icon === grid[i - 2][j].icon))) {
-
+                console.log("vertical happened")
                 foundMatch = true;
                 vertical_match = true;
             }
@@ -140,7 +140,7 @@ function removeMatchesAndRefill() {
                 {
                     removeIconByCoordinatesAndReplace(i, j);
                     removeIconByCoordinatesAndReplace(i - 1, j);
-                    removeIconByCoordinatesAndReplace(i + 2, j);
+                    removeIconByCoordinatesAndReplace(i - 2, j);
                     updateScore(1);
                 }
 
@@ -199,6 +199,8 @@ function dragStart() {
     image = this;
     Selected_row = this.row; // Get row value
     Selected_col = this.col; // Get column value
+    console.log("Selected Cols" + Selected_row);
+        console.log("Selected cols"+ Selected_col);
 }
 
 function dragDrop(e) {
@@ -206,7 +208,15 @@ function dragDrop(e) {
     target_image = this;
     target_Row = this.row; // Get target row value
     target_Col = this.col; // Get target column value
-    select_icon();
+    if ((Math.abs(target_Row - Selected_row) == 1 && target_Col == Selected_col) ||
+        (Math.abs(target_Col - Selected_col) == 1 && target_Row == Selected_row)) {
+        console.log("Legal move");
+        console.log("target row: " + target_Row);
+        console.log("target column: " + target_Col);
+        select_icon();
+    } else {
+        console.log("Illegal move");
+    }
 }
 
 function dragOver(e) {
@@ -235,7 +245,6 @@ function removeIconByCoordinatesAndReplace(row, col) {
         col: col
     };
     displayIcon();
-    console.log(grid[row][col].icon)
 }
 
 
